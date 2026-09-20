@@ -13,7 +13,7 @@ export type TransactionOutcome =
   | "HARD_DECLINE"
   | "FRAUD_BLOCK";
 export type RoutingReason =
-  | "BIN_UPLIFT"
+  | "STRIPE_INTELLIGENCE_CAPTURE" // formerly BIN_UPLIFT — cross-border BIN → Stripe Intelligence Layer
   | "LATENCY_FALLBACK"
   | "FRAUD_BLOCK"
   | "PASS_THROUGH"
@@ -41,10 +41,16 @@ export interface ProcessorConfig {
 }
 
 // ── Routing Decision ─────────────────────────────────────────
+// stripeIntelligenceEngaged is the authoritative flag: true when Stripe's
+// Intelligence Layer actively captured the transaction (optimizedRoute === "STRIPE"
+// and reason !== "PASS_THROUGH"). Tier 2 and Tier 3 revenue eligibility are gated
+// on this field — not on raw routing reason comparisons — so the exclusivity
+// contract is enforced at the type boundary, not scattered across callsites.
 export interface RoutingDecision {
   directRoute: ProcessorId;
-  optimizedRoute: ProcessorId;
+  optimizedRoute: ProcessorId; // always "STRIPE" or same as directRoute — never ADYEN/BRAINTREE
   reason: RoutingReason;
+  stripeIntelligenceEngaged: boolean; // true iff optimizedRoute === "STRIPE" && reason !== "PASS_THROUGH"
 }
 
 // ── Transaction ──────────────────────────────────────────────

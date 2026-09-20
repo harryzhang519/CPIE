@@ -60,14 +60,14 @@ function RoutingBadge({ reason, direct, optimized }: {
     );
   }
 
-  if (reason === "BIN_UPLIFT") {
+  if (reason === "STRIPE_INTELLIGENCE_CAPTURE") {
     return (
       <div className="flex items-center gap-1.5 text-brand-stripe">
         <span className="rounded bg-brand-stripe/20 px-1 py-0.2 text-[9px] font-bold font-mono text-brand-stripe-light">
           SLIDE 2
         </span>
-        <span className="text-[11px] font-semibold">BIN Route</span>
-        <span className="text-brand-dim_text text-[10px] font-mono">({direct}→{optimized})</span>
+        <span className="text-[11px] font-semibold">Stripe Intelligence Capture</span>
+        <span className="text-brand-dim_text text-[10px] font-mono">({direct}→STRIPE)</span>
       </div>
     );
   }
